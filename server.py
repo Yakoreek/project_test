@@ -32,14 +32,19 @@ class UserRequestsHandler(BaseHTTPRequestHandler):
 
         users = []
         for __ in range(number_of_users):
-            requested_number_of = number_of_users
-            status = 'success'
             users.append(
         {'name': faker.name()},
                 {'address': faker.address()},
                 {'age': random.randint(0, 100)},
                 {'premium_user': random.choice('False', 'True')}
             )
+
+
+        response = {
+            'requested_number_of': number_of_users,
+            'status': 'success',
+            'users': users,
+        }
 
 
         self.send_response(200)
