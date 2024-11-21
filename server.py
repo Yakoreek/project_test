@@ -36,10 +36,10 @@ class UserRequestsHandler(BaseHTTPRequestHandler):
             status = 'success'
             users.append(
         {'name': faker.name()},
-                {'address': faker.address()}
+                {'address': faker.address()},
+                {'age': random.randint(0, 100)},
+                {'premium_user': random.choice('False', 'True')}
             )
-            age = random.randint(0, 100)
-            premium_user = random.choice('False', 'True')
 
 
         self.send_response(200)
