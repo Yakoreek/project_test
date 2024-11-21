@@ -1,4 +1,5 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import os
 import json
 import random
 from faker import Faker
@@ -10,7 +11,7 @@ faker = Faker()
 class UserRequestsHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_url = urlparse(self.path)
-        if parsed_url != '/Users':
+        if parsed_url.path != '/Users':
             self.send_response(404)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
@@ -28,15 +29,16 @@ class UserRequestsHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(b'Invalid number of users')
-
+            return
 
         users = []
         for __ in range(number_of_users):
-            users.append(
-        {'name': faker.name()},
-                {'address': faker.address()},
-                {'age': random.randint(0, 100)},
-                {'premium_user': random.choice('False', 'True')}
+            users.append({
+                'name': faker.name(),
+                'address': faker.address(),
+                'age': random.randint(0, 100),
+                'premium_user': random.choice(['False', 'True'])
+            }
             )
 
 
@@ -48,6 +50,18 @@ class UserRequestsHandler(BaseHTTPRequestHandler):
 
 
         self.send_response(200)
-        self.send_header('Content-type', 'application/json') # создание заголовка ответа
+        self.send_header('Content-type', 'application/json')
         self.end_headers() # обозначает конец заголовка
-        self.wfile.write(json.dumps({'user': faker.user_name()}).encode())
+        self.wfile.write(json.dumps(response).encode('utf-8'))
+
+
+
+
+
+
+if __name__ == '__main__':
+    os.chdir('.')
+    server_object = HTTPServer(('', 80), RequestHandlerClass = UserRequestsHandler)
+    print('Server running on port 80')
+    server_object.serve_forever()
+
