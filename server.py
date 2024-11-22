@@ -20,10 +20,10 @@ class UserRequestsHandler(BaseHTTPRequestHandler):
 
 
         query_params = parse_qs(parsed_url.query)
-        number_of_users = query_params.get('number_of_users', [1])[0]
+        number_of_users = query_params.get('number_of_users', [1])[0] # посмотреть эту строчку и разобрать ее 
 
         try:
-            number_of_users = int(number_of_users)
+            number_of_users = int(number_of_users) # также изучить эту строчку
         except ValueError:
             self.send_response(400)
             self.send_header('Content-type', 'application/json')
